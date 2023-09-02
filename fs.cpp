@@ -3,21 +3,23 @@
 #include <vector>
 #include <filesystem>
 
-// -std=c++17
-//
-
 namespace fs = std::filesystem;
 
-void ExploreDirectory(const fs::path& directory) {
+std::vector<std::string> ExploreDirectory(const fs::path& directory) {
+    std::vector<std::string> fileNames;
+
     for (const auto& entry : fs::directory_iterator(directory)) {
         if (fs::is_directory(entry)) {
             // ディレクトリの場合、再帰的に探索
-            ExploreDirectory(entry.path());
+            auto subDirectoryFiles = ExploreDirectory(entry.path());
+            fileNames.insert(fileNames.end(), subDirectoryFiles.begin(), subDirectoryFiles.end());
         } else if (fs::is_regular_file(entry) && entry.path().extension() == ".cpp") {
-            // ファイルの場合、ファイル名を表示
-            std::cout << "File: " << entry.path().string() << std::endl;
+            // 拡張子が ".cpp" のファイルを追加
+            fileNames.push_back(entry.path().string());
         }
     }
+
+    return fileNames;
 }
 
 int main() {
@@ -25,8 +27,13 @@ int main() {
         // カレントディレクトリを取得
         fs::path currentDir = fs::current_path();
 
-        // ディレクトリを探索
-        ExploreDirectory(currentDir);
+        // ディレクトリを探索してファイル名のリストを取得
+        std::vector<std::string> fileNames = ExploreDirectory(currentDir);
+
+        // ファイル名を表示
+        for (const auto& fileName : fileNames) {
+            std::cout << "File: " << fileName << std::endl;
+        }
     } catch (const std::exception& ex) {
         std::cerr << "エラー: " << ex.what() << std::endl;
     }
