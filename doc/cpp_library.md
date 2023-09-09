@@ -5,3 +5,4 @@
 | ファイルシステム | pathlib | std::filesystem |
 | list | list | `std::vector<std::string>` |
 | dict | {}   | `std::map<std::string, int>` |
+| コマンドライン引数の処理 | argparse | cv::CommandLineParser |
