@@ -2,30 +2,40 @@
 #include <string>
 #include <vector>
 
-int main(){
-  auto string    = std::string("a, b, c");    // 分割対象の文字列
-  auto separator = std::string(", ");         // 区切り文字
-  auto separator_length = separator.length(); // 区切り文字の長さ
+// 文字列を指定された区切り文字で分割し、結果をstd::vectorに格納する関数
+std::vector<std::string> splitString(const std::string& input, const std::string& separator) {
+    std::vector<std::string> result;
+    size_t separator_length = separator.length();
 
-  auto list = std::vector<std::string>();
-
-  if (separator_length == 0) {
-    list.push_back(string);
-  } else {
-    auto offset = std::string::size_type(0);
-    while (1) {
-      auto pos = string.find(separator, offset);
-      if (pos == std::string::npos) {
-        list.push_back(string.substr(offset));
-        break;
-      }
-      list.push_back(string.substr(offset, pos - offset));
-      offset = pos + separator_length;
+    if (separator_length == 0) {
+        result.push_back(input);
+    } else {
+        size_t offset = 0;
+        while (true) {
+            size_t pos = input.find(separator, offset);
+            if (pos == std::string::npos) {
+                result.push_back(input.substr(offset));
+                break;
+            }
+            result.push_back(input.substr(offset, pos - offset));
+            offset = pos + separator_length;
+        }
     }
-  }
 
-for (int i = 0; i < list.size(); ++i) {
-    std::cout << list[i] << std::endl;
+    return result;
 }
-  return 0;
+
+int main() {
+    std::string input = "a, b, c";
+    std::string separator = ", ";
+    
+    // splitString関数を呼び出して文字列を分割
+    std::vector<std::string> parts = splitString(input, separator);
+
+    // 分割された部分文字列を表示
+    for (const std::string& part : parts) {
+        std::cout << part << std::endl;
+    }
+
+    return 0;
 }
