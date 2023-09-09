@@ -9,20 +9,21 @@ std::vector<std::string> splitString(const std::string& input, const std::string
 
     if (separator_length == 0) {
         result.push_back(input);
-    } else {
-        size_t offset = 0;
-        while (true) {
-            size_t pos = input.find(separator, offset);
-            if (pos == std::string::npos) {
-                result.push_back(input.substr(offset));
-                break;
-            }
-            result.push_back(input.substr(offset, pos - offset));
-            offset = pos + separator_length;
-        }
+        return result;
     }
 
-    return result;
+    size_t offset = 0;
+    while (true) {
+        size_t pos = input.find(separator, offset);
+        if (pos == std::string::npos) {
+            result.push_back(input.substr(offset));
+            break;
+        }
+        result.push_back(input.substr(offset, pos - offset));
+        offset = pos + separator_length;
+    }
+
+return result;
 }
 
 int main() {
